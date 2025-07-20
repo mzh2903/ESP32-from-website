@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kendali Lampu ESP32</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔌 Kontrol Lampu ESP32 via MQTT</h2>
+  <button onclick="sendCommand('lampumerah')">Lampu Merah</button>
+  <button onclick="sendCommand('lampukuning')">Lampu Kuning</button>
+  <button onclick="sendCommand('lampuhijau')">Lampu Hijau</button>
+  <button onclick="sendCommand('lampusemua')">Lampu Semua</button>
+
+  <script>
+    // MQTT via WebSocket
+    const broker = 'wss://public.grootech.id:8083/mqtt'; // Cek apakah ws port aktif
+    const topic = 'lampu/kontrol';
+
+    const client = mqtt.connect(broker);
+
+    client.on('connect', function () {
+      console.log('🟢 Terhubung ke MQTT Broker');
+    });
+
+    client.on('error', function (err) {
+      console.error('🔴 Koneksi MQTT Gagal:', err);
+    });
+
+    function sendCommand(command) {
+      client.publish(topic, command);
+      console.log('📤 Dikirim:', command);
+    }
+  </script>
+
+</body>
+</html>
